@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Alert, TextField } from '@mui/material'
+import { Alert, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { LoginUser } from '../../Features/user';
 
 const Login = () => {
 
     const [email, setEmail] = useState('');
+    const [warning, setWarning] = useState(false);
     const users = useSelector((state) => state.user);
     console.log(users)
     const dispatch = useDispatch();
@@ -13,15 +14,16 @@ const Login = () => {
         e.preventDefault();
         if (email) {
             dispatch(LoginUser(email));
+            setWarning(false)
         } else {
-            alert("Both fields are Required")
+            setWarning(true)
         }
     }
     return (
         <>
             <div>
-                <h1>Sign in</h1>
-                <p>Welcome user, please sign in to continue</p>
+                <Typography variant='h3' fontWeight= "700">Sign in</Typography>
+                <Typography variant='subtitle1' sx={{margin: "10px 0", fontSize: "14px"}}>Welcome user, please sign in to continue</Typography>
                 <div>
                     <form onSubmit={handleSubmit}>
                         <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address*' />
@@ -32,6 +34,10 @@ const Login = () => {
                         <button type='submit' className='btn'>Sign in</button>
                     </form>
                 </div>
+                {warning ?
+                (<Alert variant="outlined" severity="warning" sx={{marginTop: "10px"}}>
+                    Email field is required
+                </Alert>) : ""}
             </div>
         </>
     )
